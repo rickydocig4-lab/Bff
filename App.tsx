@@ -13,16 +13,16 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-// --- Background Components ---
+// --- Background ---
 const BackgroundElements = () => {
   const [hearts, setHearts] = useState<any[]>([]);
 
   useEffect(() => {
-    const newHearts = Array.from({ length: 12 }).map((_, i) => ({
+    const newHearts = Array.from({ length: 15 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       delay: `${Math.random() * 15}s`,
-      duration: `${10 + Math.random() * 10}s`,
+      duration: `${10 + Math.random() * 15}s`,
       size: 16 + Math.random() * 24
     }));
     setHearts(newHearts);
@@ -169,7 +169,7 @@ const TraumaSlide = () => {
           <div className="flex flex-col items-center animate-pop-in">
             <Trophy className="text-yellow-500 w-16 h-16 mb-4" />
             <h3 className="text-2xl font-bold text-green-500">TRAUMA OBLITERATED!</h3>
-            <p className="text-green-600 mt-2">Smriti is now officially in her Peace Era. ✨</p>
+            <p className="text-green-600 mt-2 italic px-6 py-2 bg-green-50 rounded-full border border-green-200">Smriti is now officially in her Peace Era. ✨</p>
           </div >
         )}
       </div>
@@ -239,6 +239,7 @@ const ContractSlide = () => {
   );
 };
 
+// --- Main App ---
 const App: React.FC = () => {
   const [slide, setSlide] = useState(0);
   const slides = [
@@ -292,7 +293,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="absolute bottom-4 w-full text-center text-[10px] text-pink-300 font-bold tracking-widest uppercase">
-        Handcrafted for Smriti with 💖 
+        Handcrafted for Smriti with 💖 • Always Iconic
       </footer>
     </div>
   );
