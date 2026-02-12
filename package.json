@@ -1,5 +1,5 @@
 {
-  "name": "copy-of-smriti's-bff-application",
+  "name": "smriti's-forever-bestie-hub",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "react": "19.0.0",
     "react-dom": "^19.2.4",
-    "react": "^19.2.4",
-    "framer-motion": "^12.34.0",
-    "lucide-react": "^0.563.0",
-    "canvas-confetti": "^1.9.4"
+    "framer-motion": "11.11.17",
+    "lucide-react": "0.460.0",
+    "canvas-confetti": "1.9.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
