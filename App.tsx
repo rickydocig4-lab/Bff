@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Heart, 
@@ -10,11 +10,12 @@ import {
   Pizza, 
   ShieldCheck,
   Star,
-  Trophy
+  Trophy,
+  Skull
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-// --- Background Components ---
+// --- Shared Background Elements ---
 const BackgroundElements = () => {
   const hearts = Array.from({ length: 15 });
   return (
@@ -49,7 +50,7 @@ const BackgroundElements = () => {
   );
 };
 
-// --- Slide 1: Application ---
+// --- Slide 1: The Application ---
 const ApplicationSlide = ({ onNext }: { onNext: () => void }) => {
   const [accepted, setAccepted] = useState(false);
   const handleAccept = () => {
@@ -68,7 +69,7 @@ const ApplicationSlide = ({ onNext }: { onNext: () => void }) => {
         Official Request for Smriti’s Forever Friendship 💖
       </h1>
       <div className="bg-pink-50/60 p-6 rounded-3xl border-2 border-dashed border-pink-200 mb-8 text-lg text-pink-700 italic shadow-inner">
-        <p className="mb-4 font-bold">“Dear Smriti,”</p>
+        <p className="mb-4 font-bold italic">“Dear Smriti,”</p>
         <p className="leading-relaxed">
           I am hereby applying for the lifetime position of your Chief Gossip Officer, 
           Professional Hype-Person, and Emergency Snacking Partner. 🫶
@@ -97,11 +98,11 @@ const ApplicationSlide = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-// --- Slide 2: Reasons ---
+// --- Slide 2: The Iconic Reasons ---
 const ReasonsSlide = () => {
   const reasons = [
     { text: "We match energy like WiFi + Password 📶", emoji: "⚡" },
-    { text: "We laugh at the dumbest inside jokes 😂", emoji: "🤡" },
+    { text: "We laugh at things that aren't even funny 😂", emoji: "🤡" },
     { text: "I'll defend you even if you're the villain 🛡️", emoji: "😈" },
     { text: "Unlimited access to my heart & memes 📱", emoji: "🎁" }
   ];
@@ -122,40 +123,57 @@ const ReasonsSlide = () => {
           </motion.div>
         ))}
       </div>
+      <div className="mt-10 text-blue-300 text-sm italic animate-pulse">✨ A few of a million reasons ✨</div>
     </div>
   );
 };
 
-// --- Slide 3: Trauma Eraser ---
+// --- Slide 3: Trauma Eraser Game ---
 const TraumaSlide = () => {
   const [hp, setHp] = useState(100);
   const [isDead, setIsDead] = useState(false);
+  const [isHitting, setIsHitting] = useState(false);
+
   const attacks = [
     { n: "Aggressive Hype", p: 25, c: "bg-yellow-400", i: <Zap /> },
     { n: "Endless Reels", p: 15, c: "bg-purple-400", i: <Star /> },
     { n: "Hot Pizza Delivery", p: 40, c: "bg-orange-400", i: <Pizza /> }
   ];
+
   const hit = (p: number) => {
     if (isDead) return;
+    setIsHitting(true);
     setHp(h => Math.max(0, h - p));
+    setTimeout(() => setIsHitting(false), 150);
     if (hp - p <= 0) {
       setIsDead(true);
       confetti({ particleCount: 100, spread: 70, colors: ['#ff0000', '#ffffff'] });
     }
   };
+
   return (
     <div className="w-full flex flex-col items-center text-center">
       <h2 className="text-3xl font-bold text-rose-500 mb-4 uppercase tracking-tighter">Mini-Game: Destroy the Bad Vibes 👾</h2>
       <div className="relative py-8 flex flex-col items-center w-full">
         {!isDead ? (
           <>
-            <motion.div animate={{ y: [0, -10, 0], rotate: [0, 2, -2, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-8xl mb-6 select-none cursor-pointer">👾</motion.div>
+            <motion.div 
+              animate={isHitting ? { scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] } : { y: [0, -10, 0], rotate: [0, 2, -2, 0] }} 
+              transition={{ repeat: isHitting ? 0 : Infinity, duration: 2 }} 
+              className="text-8xl mb-6 select-none cursor-pointer"
+            >
+              👾
+            </motion.div>
             <div className="w-full max-w-xs h-4 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-inner mb-8">
               <motion.div animate={{ width: `${hp}%` }} className="h-full bg-red-500 transition-all" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full px-4">
               {attacks.map((a, i) => (
-                <button key={i} onClick={() => hit(a.p)} className={`${a.c} text-white p-3 rounded-xl font-bold flex flex-col items-center text-xs shadow-md active:scale-95 transition-transform hover:scale-105`}>
+                <button 
+                  key={i} 
+                  onClick={() => hit(a.p)} 
+                  className={`${a.c} text-white p-3 rounded-xl font-bold flex flex-col items-center text-[10px] shadow-md active:scale-95 transition-transform hover:scale-105`}
+                >
                   {a.i} {a.n}
                 </button>
               ))}
@@ -165,7 +183,9 @@ const TraumaSlide = () => {
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex flex-col items-center">
             <Trophy className="text-yellow-500 w-16 h-16 mb-4" />
             <h3 className="text-2xl font-bold text-green-500">TRAUMA OBLITERATED!</h3>
-            <p className="text-green-600 mt-2">Smriti is now officially in her Peace Era. ✨</p>
+            <p className="text-green-600 mt-2 italic bg-green-50 px-4 py-2 rounded-full border border-green-200">
+              Smriti is now officially in her Peace Era. ✨
+            </p>
           </motion.div>
         )}
       </div>
@@ -173,15 +193,15 @@ const TraumaSlide = () => {
   );
 };
 
-// --- Slide 4: Treasure Vault ---
+// --- Slide 4: Safe Space / Treasure ---
 const VaultSlide = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col items-center text-center">
       <h2 className="text-3xl font-bold text-purple-600 mb-6 font-romantic">Your Memories Are My Treasure 💎</h2>
       <div className="bg-purple-50/80 p-6 rounded-[2rem] border border-purple-200 mb-8 italic text-purple-800 leading-relaxed shadow-sm">
-        "Every shared secret and inside joke is stored in a special vault in my heart. 
-        I keep them safe, cherished, and protected forever."
+        "Every gift you've ever given me, every inside joke, and every shared tear is stored in a special vault in my heart. 
+        I keep them safe, clean, and protected like precious treasure."
       </div>
       <motion.div 
         onClick={() => { setOpen(!open); if(!open) confetti({ particleCount: 30, colors: ['#a855f7'] }); }}
@@ -190,19 +210,19 @@ const VaultSlide = () => {
       >
         {open ? '💖' : '🎁'}
       </motion.div>
-      <p className="mt-4 text-purple-400 text-sm font-medium">{open ? "You are the center of it!" : "Click to open the vault"}</p>
+      <p className="mt-4 text-purple-400 text-sm font-medium">{open ? "Handled with love & care!" : "Click to open the vault"}</p>
     </div>
   );
 };
 
-// --- Slide 5: Contract ---
+// --- Slide 5: The Contract ---
 const ContractSlide = () => {
   const [signed, setSigned] = useState(false);
   const checks = [
-    "Answer your 3 AM crises (even if I'm half-asleep)",
-    "Send the most specific memes for your mood",
-    "Defend your honor even against a scary bug 🐜",
-    "Be your Bestie Forever (Non-Negotiable)"
+    "I promise to answer your 3 AM crises.",
+    "I promise to send memes for every mood.",
+    "I promise to defend you against anyone (or bugs 🐜).",
+    "I promise to be your Bestie Forever (Non-Negotiable)."
   ];
   return (
     <div className="w-full flex flex-col items-center">
@@ -218,7 +238,7 @@ const ContractSlide = () => {
           ))}
         </div>
         <div className="flex justify-between items-end border-t border-yellow-100 pt-6">
-          <div className="text-xs text-yellow-600 italic">Official Signature:</div>
+          <div className="text-xs text-yellow-600 italic">Seal with a click:</div>
           <button 
             onClick={() => { setSigned(true); confetti(); }}
             className={`px-6 py-2 rounded-lg font-bold transition-all ${signed ? 'bg-green-100 text-green-600 cursor-default' : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'}`}
@@ -228,7 +248,7 @@ const ContractSlide = () => {
         </div>
       </div>
       {signed && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-pink-500 font-bold flex items-center gap-2">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-pink-500 font-bold flex items-center gap-2 animate-bounce">
           <Heart fill="currentColor" size={20} /> STUCK WITH ME FOREVER! <Heart fill="currentColor" size={20} />
         </motion.div>
       )}
@@ -236,7 +256,7 @@ const ContractSlide = () => {
   );
 };
 
-// --- Main App ---
+// --- Main App Component ---
 const App: React.FC = () => {
   const [slide, setSlide] = useState(0);
   const slides = [
@@ -268,11 +288,12 @@ const App: React.FC = () => {
           </motion.div>
         </AnimatePresence>
 
+        {/* Navigation Bar */}
         <div className="mt-8 flex items-center justify-center gap-6">
           <button 
             onClick={handlePrev}
             disabled={slide === 0}
-            className={`p-3 rounded-full bg-white/80 shadow-md transition-all ${slide === 0 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500'}`}
+            className={`p-3 rounded-full bg-white/80 shadow-md transition-all ${slide === 0 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500 hover:bg-pink-50'}`}
           >
             <ChevronLeft size={28} />
           </button>
@@ -289,7 +310,7 @@ const App: React.FC = () => {
           <button 
             onClick={handleNext}
             disabled={slide === slides.length - 1}
-            className={`p-3 rounded-full bg-white/80 shadow-md transition-all ${slide === slides.length - 1 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500'}`}
+            className={`p-3 rounded-full bg-white/80 shadow-md transition-all ${slide === slides.length - 1 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500 hover:bg-pink-50'}`}
           >
             <ChevronRight size={28} />
           </button>
@@ -297,7 +318,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="absolute bottom-4 w-full text-center text-[10px] text-pink-300 font-bold tracking-widest uppercase">
-        Handcrafted for Smriti with 💖 
+        Handcrafted with 💖 for Smriti • Always Iconic
       </footer>
     </div>
   );
