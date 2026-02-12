@@ -9,11 +9,12 @@ import {
   Pizza, 
   ShieldCheck,
   Star,
-  Trophy
+  Trophy,
+  Gift
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-// --- Background ---
+// --- Background Components ---
 const BackgroundElements = () => {
   const [hearts, setHearts] = useState<any[]>([]);
 
@@ -22,7 +23,7 @@ const BackgroundElements = () => {
       id: i,
       left: `${Math.random() * 100}%`,
       delay: `${Math.random() * 15}s`,
-      duration: `${10 + Math.random() * 15}s`,
+      duration: `${10 + Math.random() * 10}s`,
       size: 16 + Math.random() * 24
     }));
     setHearts(newHearts);
@@ -62,7 +63,7 @@ const ApplicationSlide = ({ onNext }: { onNext: () => void }) => {
     });
   };
   return (
-    <div className="flex flex-col items-center text-center animate-fade-in">
+    <div className="flex flex-col items-center text-center animate-fade-in w-full max-w-xl">
       <div className="text-7xl mb-6 floating animate-pop-in">💌</div>
       <h1 className="text-3xl md:text-5xl font-bold text-pink-600 mb-6 font-romantic tracking-wide">
         Official Request for Smriti’s Forever Friendship 💖
@@ -105,7 +106,7 @@ const ReasonsSlide = () => {
   ];
   return (
     <div className="w-full flex flex-col items-center animate-fade-in">
-      <h2 className="text-3xl md:text-4xl font-bold text-blue-500 mb-8 font-romantic">Why We're Actually Iconic 💅</h2>
+      <h2 className="text-3xl md:text-4xl font-bold text-blue-500 mb-8 font-romantic text-center">Why We're Actually Iconic 💅</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl">
         {reasons.map((r, i) => (
           <div
@@ -122,7 +123,7 @@ const ReasonsSlide = () => {
   );
 };
 
-// --- Slide 3: Trauma Eraser ---
+// --- Slide 3: Trauma Eraser Game ---
 const TraumaSlide = () => {
   const [hp, setHp] = useState(100);
   const [isDead, setIsDead] = useState(false);
@@ -169,7 +170,7 @@ const TraumaSlide = () => {
           <div className="flex flex-col items-center animate-pop-in">
             <Trophy className="text-yellow-500 w-16 h-16 mb-4" />
             <h3 className="text-2xl font-bold text-green-500">TRAUMA OBLITERATED!</h3>
-            <p className="text-green-600 mt-2 italic px-6 py-2 bg-green-50 rounded-full border border-green-200">Smriti is now officially in her Peace Era. ✨</p>
+            <p className="text-green-600 mt-2 italic bg-green-50 px-6 py-2 rounded-full border border-green-200">Smriti is now officially in her Peace Era. ✨</p>
           </div >
         )}
       </div>
@@ -181,7 +182,7 @@ const TraumaSlide = () => {
 const VaultSlide = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex flex-col items-center text-center animate-fade-in">
+    <div className="flex flex-col items-center text-center animate-fade-in w-full max-w-xl">
       <h2 className="text-3xl font-bold text-purple-600 mb-6 font-romantic">Your Memories Are My Treasure 💎</h2>
       <div className="bg-purple-50/80 p-6 rounded-[2rem] border border-purple-200 mb-8 italic text-purple-800 leading-relaxed shadow-sm">
         "Every shared secret and inside joke is stored in a special vault in my heart. 
@@ -268,7 +269,7 @@ const App: React.FC = () => {
           <button 
             onClick={handlePrev}
             disabled={slide === 0}
-            className={`p-3 rounded-full bg-white/80 shadow-md transition-all active-scale ${slide === 0 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500'}`}
+            className={`p-3 rounded-full bg-white/80 shadow-md transition-all active-scale ${slide === 0 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500 bg-white'}`}
           >
             <ChevronLeft size={28} />
           </button>
@@ -285,7 +286,7 @@ const App: React.FC = () => {
           <button 
             onClick={handleNext}
             disabled={slide === slides.length - 1}
-            className={`p-3 rounded-full bg-white/80 shadow-md transition-all active-scale ${slide === slides.length - 1 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500'}`}
+            className={`p-3 rounded-full bg-white/80 shadow-md transition-all active-scale ${slide === slides.length - 1 ? 'opacity-20 cursor-not-allowed' : 'hover:scale-110 text-pink-500 bg-white'}`}
           >
             <ChevronRight size={28} />
           </button>
